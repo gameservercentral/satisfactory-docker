@@ -50,13 +50,13 @@ jobs:
         echo "::set-output name=manifest_id::$manifest"
 
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-      with:
-        context: .
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: |
-          ghcr.io/gameservercentral/satisfactory:latest
-          ghcr.io/gameservercentral/satisfactory:nightly
-          ghcr.io/gameservercentral/satisfactory:${{ steps.get_manifest.outputs.manifest_id }}
-        labels: ${{ steps.meta.outputs.labels }}
+#    - name: Build and push Docker image
+#      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+#      with:
+#        context: .
+#        push: ${{ github.event_name != 'pull_request' }}
+#        tags: |
+#          ghcr.io/gameservercentral/satisfactory:latest
+#          ghcr.io/gameservercentral/satisfactory:nightly
+#          ghcr.io/gameservercentral/satisfactory:${{ steps.get_manifest.outputs.manifest_id }}
+#        labels: ${{ steps.meta.outputs.labels }}
