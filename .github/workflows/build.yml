@@ -42,7 +42,7 @@ jobs:
         sudo dpkg --add-architecture i386
         sudo apt update
         sudo apt install -y steamcmd
-        manifest=$(steamcmd +login anonymous +app_info_print 1690800 +quit | grep -m1 manifest | awk '{print $3}')
+        manifest=$(steamcmd +login anonymous +accept_license +app_info_print 1690800 +quit | grep -m1 manifest | awk '{print $3}')
         echo "Manifest ID: $manifest"
         echo "::set-output name=manifest_id::$manifest"
 
