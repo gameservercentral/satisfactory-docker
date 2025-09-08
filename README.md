@@ -23,9 +23,9 @@ To run the container with the common Satisfactory Dedicated Server ports exposed
 
 ```sh
 docker run -it --rm \
-  -v /path/to/local/saves:/data/FactoryGame/Saved/SaveGames \
+  -v /path/to/local/saves:/data-preseed/FactoryGame/Saved/SaveGames \
   -p 7777:7777/udp \
   -p 15000:15000/udp \
   -p 15777:15777/udp \
-  satisfactory-local /data/FactoryServer.sh
+  satisfactory-local /data-preseed/FactoryServer.sh
 ```
