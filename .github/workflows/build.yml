@@ -12,8 +12,6 @@ on:
   
 
 jobs:
-    
-  
   build:
     runs-on: ubuntu-latest
     outputs:
@@ -21,19 +19,27 @@ jobs:
     steps:
     - uses: actions/checkout@v3
             
-    - name: Log in to the Container registry
-      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+    - name: Log in to GHCR
+      uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUBTOKEN }}
 
+    - name: Log in to Harbor registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ secrets.HARBOR_URL }}
+        username: ${{ secrets.HARBOR_USERNAME }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+
     - name: Extract metadata (tags, labels) for Docker
       id: meta
-      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      uses: docker/metadata-action@v4
       with:
-        images: ghcr.io/gameservercentral/steamcmd-docker
-
+        images: |
+          ghcr.io/gameservercentral/satisfactory
+          ${{ secrets.HARBOR_URL }}/gameservercentral/satisfactory
 
     - name: Extract Satisfactory buildID 
       id: get_manifest
@@ -49,9 +55,8 @@ jobs:
         echo "Manifest ID: $manifest"
         echo "::set-output name=manifest_id::$manifest"
 
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+    - name: Build and push Docker image to both registries
+      uses: docker/build-push-action@v5
       with:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
@@ -59,4 +64,6 @@ jobs:
           ghcr.io/gameservercentral/satisfactory:latest
           ghcr.io/gameservercentral/satisfactory:nightly
           ghcr.io/gameservercentral/satisfactory:${{ steps.get_manifest.outputs.manifest_id }}
+          registry.wenisch.tech/myproject/satisfactory:latest
+          registry.wenisch.tech/myproject/satisfactory:nightly
         labels: ${{ steps.meta.outputs.labels }}
