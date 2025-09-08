@@ -36,19 +36,6 @@ jobs:
           ghcr.io/gameservercentral/satisfactory
           ${{ secrets.REGISTRY_URL }}/gameservercentral/satisfactory
 
-    - name: Extract Satisfactory buildID 
-      id: get_manifest
-      run: |
-        sudo apt update
-        sudo apt install -y wget ca-certificates lib32gcc-s1
-        mkdir -p ~/steamcmd
-        wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz -O ~/steamcmd/steamcmd_linux.tar.gz
-        tar -xzf ~/steamcmd/steamcmd_linux.tar.gz -C ~/steamcmd
-        mkdir -p ~/.steam
-        echo "@SteamCmdForceLicense=1" > ~/.steam/steamcmd.cfg
-        manifest=$(~/steamcmd/steamcmd.sh +login anonymous +app_info_print 1690800 +quit | awk '/"public"/,/\}/ {if ($1 == "\"buildid\"") print $2}' | head -n1 | sed 's/"//g')
-        echo "Manifest ID: $manifest"
-        echo "::set-output name=manifest_id::$manifest"
 
     - name: Build and push Docker image to both registries
       uses: docker/build-push-action@v5
@@ -58,5 +45,4 @@ jobs:
         tags: |
           registry.wenisch.tech/gameservercentral/satisfactory:latest
           registry.wenisch.tech/gameservercentral/satisfactory:nightly
-          registry.wenisch.tech/gameservercentral/satisfactory:${{ steps.get_manifest.outputs.manifest_id }}
         labels: ${{ steps.meta.outputs.labels }}
