@@ -56,9 +56,7 @@ jobs:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
         tags: |
-          ghcr.io/gameservercentral/satisfactory:latest
-          ghcr.io/gameservercentral/satisfactory:nightly
-          ghcr.io/gameservercentral/satisfactory:${{ steps.get_manifest.outputs.manifest_id }}
-          registry.wenisch.tech/myproject/satisfactory:latest
-          registry.wenisch.tech/myproject/satisfactory:nightly
+          registry.wenisch.tech/gameservercentral/satisfactory:latest
+          registry.wenisch.tech/gameservercentral/satisfactory:nightly
+          registry.wenisch.tech/gameservercentral/satisfactory:${{ steps.get_manifest.outputs.manifest_id }}
         labels: ${{ steps.meta.outputs.labels }}
